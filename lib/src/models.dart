@@ -34,6 +34,34 @@ class SuicaCardData {
       'balance: $balance JPY, '
       'trips: ${history.length}'
       ')';
+
+  Map<String, dynamic> toJson() => {
+    'idm': idm,
+    'systemCode': systemCode,
+    'balance': balance,
+    'history': history.map((e) => e.toJson()).toList(),
+    'scannedAt': scannedAt.toIso8601String(),
+  };
+
+  factory SuicaCardData.fromJson(Map<String, dynamic> json) => SuicaCardData(
+    idm: json['idm'] as String,
+    systemCode: json['systemCode'] as String?,
+    balance: json['balance'] as int?,
+    history: (json['history'] as List<dynamic>)
+        .map((e) => SuicaHistoryEntry.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    scannedAt: json['scannedAt'] != null
+        ? DateTime.parse(json['scannedAt'] as String)
+        : DateTime.now(),
+  );
+
+  SuicaCardData copyWith({DateTime? scannedAt}) => SuicaCardData(
+    idm: idm,
+    systemCode: systemCode,
+    balance: balance,
+    history: history,
+    scannedAt: scannedAt ?? this.scannedAt,
+  );
 }
 
 /// Terminal type codes decoded from history block byte 0.
@@ -97,4 +125,29 @@ class SuicaHistoryEntry {
       'process: ${processType.label}, '
       'balanceAfter: $balanceAfter JPY'
       ')';
+
+  Map<String, dynamic> toJson() => {
+    'date': date?.toIso8601String(),
+    'terminalType': terminalType.name,
+    'processType': processType.name,
+    'balanceAfter': balanceAfter,
+    'raw': raw,
+  };
+
+  factory SuicaHistoryEntry.fromJson(Map<String, dynamic> json) =>
+      SuicaHistoryEntry(
+        date: json['date'] != null
+            ? DateTime.parse(json['date'] as String)
+            : null,
+        terminalType: TerminalType.values.firstWhere(
+          (e) => e.name == json['terminalType'],
+          orElse: () => TerminalType.unknown,
+        ),
+        processType: ProcessType.values.firstWhere(
+          (e) => e.name == json['processType'],
+          orElse: () => ProcessType.unknown,
+        ),
+        balanceAfter: json['balanceAfter'] as int?,
+        raw: (json['raw'] as List<dynamic>).cast<int>(),
+      );
 }
