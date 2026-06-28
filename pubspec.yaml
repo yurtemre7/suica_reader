@@ -3,7 +3,7 @@ description: >-
   Read Suica, PASMO, and compatible FeliCa transit card data on
   NFC-enabled Android and iOS devices — balance, recent trip history,
   and raw card identity.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/yurtemre7/suica_reader
 repository: https://github.com/yurtemre7/suica_reader
 issue_tracker: https://github.com/yurtemre7/suica_reader/issues
