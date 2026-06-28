@@ -74,11 +74,11 @@ class NfcManagerSuicaTransport implements SuicaNfcTransport {
                 balanceResp.blockData.isNotEmpty) {
               balanceBlock = List<int>.from(balanceResp.blockData.first);
               // Print every byte with its index so we can find the balance offset
-              print(
+              _log(
                 '[SuicaReader] Balance block (${balanceBlock.length} bytes):',
               );
               for (var i = 0; i < balanceBlock.length; i++) {
-                print(
+                _log(
                   '[SuicaReader]   [$i] = 0x${balanceBlock[i].toRadixString(16).padLeft(2, '0')} (${balanceBlock[i]})',
                 );
               }
